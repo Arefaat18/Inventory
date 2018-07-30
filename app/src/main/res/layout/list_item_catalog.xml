@@ -21,4 +21,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/quantity"
         tools:text="50"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sellbtn"
+        android:text="SELL"/>
+
 </LinearLayout>

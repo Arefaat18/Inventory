@@ -1,82 +1,72 @@
 package com.example.user.inventory;
 
 import android.app.Activity;
+import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
+import android.content.CursorLoader;
+import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
+
 import com.example.user.inventory.data.InventoryContract;
-import com.example.user.inventory.data.InventoryDbHelper;
 
-public class CatalogActivity extends Activity {
 
-    private InventoryDbHelper dbHelper;
+public class CatalogActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private static final int INVENTORY_LOADER = 0;
+    InventoryCursorAdapter mCursorAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_catalog);
 
-        dbHelper = new InventoryDbHelper(this);
-
-        displayDatabaseInfo();
-
-        final Button button = (Button) findViewById(R.id.button_save);
-        button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                insertData();
-                displayDatabaseInfo();
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(CatalogActivity.this, EditorActivity.class);
+                startActivity(intent);
             }
         });
-    }
-    private void displayDatabaseInfo(){
-        SQLiteDatabase database = dbHelper.getReadableDatabase();
 
-        String[] projection = {
-                InventoryContract.InventoryEntry._ID,
-                InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME,
-                InventoryContract.InventoryEntry.COLUMN_PRICE,
-                InventoryContract.InventoryEntry.COLUMN_QUANTITY
+        ListView listView = (ListView) findViewById(R.id.list);
 
-        };
+        View emptyView = findViewById(R.id.empty_view);
+        listView.setEmptyView(emptyView);
 
-        Cursor cursor = database.query(InventoryContract.InventoryEntry.TABLE_NAME,projection,null,null,null,null,null);
-        try{
-            TextView display = (TextView) findViewById(R.id.text_view);
-            display.setText("The table has " + cursor.getCount() + " products\n");
-            display.append(InventoryContract.InventoryEntry._ID + " - " +
-                    InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME + " - " +
-                    InventoryContract.InventoryEntry.COLUMN_PRICE + " - " +
-                    InventoryContract.InventoryEntry.COLUMN_QUANTITY + " - " +
-                    InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME + " - " +
-                    InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER + " - \n");
+        mCursorAdapter = new InventoryCursorAdapter(this,null);
+        listView.setAdapter(mCursorAdapter);
 
-            int idColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME);
-            int priceColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_PRICE);
-            int quantityColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_QUANTITY);
-            int SupplierNameColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME);
-            int SupplierNumberColumnIndex = cursor.getColumnIndex(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
-
-            while (cursor.moveToNext()){
-                int currentID = cursor.getInt(idColumnIndex);
-                String currentName = cursor.getString(nameColumnIndex);
-                float currentPrice = cursor.getFloat(priceColumnIndex);
-                int currentQuantity = cursor.getInt(quantityColumnIndex);
-
-                display.append("\n" + currentID + " - " + currentName + " - " + currentPrice + " - " + currentQuantity);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+              Intent intent = new Intent(CatalogActivity.this,DetailedViewActivity.class);
+              Uri currentUri = ContentUris.withAppendedId(InventoryContract.InventoryEntry.CONTENT_URI,id);
+              intent.setData(currentUri);
+              startActivity(intent);
 
             }
-        }
-        finally {
-            cursor.close();
-        }
+        });
+
+        getLoaderManager().initLoader(INVENTORY_LOADER,null,null);
     }
+
     private void insertData(){
-        SQLiteDatabase database = dbHelper.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME,"Harry Potter and the Sorcerer's Stone");
@@ -85,9 +75,59 @@ public class CatalogActivity extends Activity {
         values.put(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME,"Bloomsburry");
         values.put(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER,"201034365948");
 
-        long newRowId = database.insert(InventoryContract.InventoryEntry.TABLE_NAME,null,values);
-        System.out.println(newRowId);
+        Uri newUri = getContentResolver().insert(InventoryContract.InventoryEntry.CONTENT_URI,values);
+
     }
 
+    private void deleteAllProducts(){
+        int rowsDeleted = getContentResolver().delete(InventoryContract.InventoryEntry.CONTENT_URI,null,null);
+        Log.v("CatalogActivity", rowsDeleted + " rows deleted from database");
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu options from the res/menu/menu_catalog.xml file.
+        // This adds menu items to the app bar.
+        getMenuInflater().inflate(R.menu.menu_catalog, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // User clicked on a menu option in the app bar overflow menu
+        switch (item.getItemId()) {
+            // Respond to a click on the "Insert dummy data" menu option
+            case R.id.action_insert_dummy_data:
+                insertData();
+                return true;
+            // Respond to a click on the "Delete all entries" menu option
+            case R.id.action_delete_all_entries:
+                deleteAllProducts();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection = {
+                InventoryContract.InventoryEntry._ID,
+                InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME,
+                InventoryContract.InventoryEntry.COLUMN_PRICE,
+                InventoryContract.InventoryEntry.COLUMN_QUANTITY
+        };
+
+        return new CursorLoader(this, InventoryContract.InventoryEntry.CONTENT_URI,
+                projection,null,null,null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mCursorAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mCursorAdapter.swapCursor(null);
+    }
 }
