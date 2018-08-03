@@ -55,7 +55,7 @@ public class CatalogActivity extends Activity implements LoaderManager.LoaderCal
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-              Intent intent = new Intent(CatalogActivity.this,DetailedViewActivity.class);
+              Intent intent = new Intent(CatalogActivity.this,EditorActivity.class);
               Uri currentUri = ContentUris.withAppendedId(InventoryContract.InventoryEntry.CONTENT_URI,id);
               intent.setData(currentUri);
               startActivity(intent);
