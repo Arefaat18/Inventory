@@ -63,7 +63,7 @@ public class CatalogActivity extends Activity implements LoaderManager.LoaderCal
             }
         });
 
-        getLoaderManager().initLoader(INVENTORY_LOADER,null,null);
+        getLoaderManager().initLoader(INVENTORY_LOADER,null,this);
     }
 
     private void insertData(){

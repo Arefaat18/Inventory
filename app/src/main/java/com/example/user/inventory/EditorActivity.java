@@ -50,7 +50,7 @@ public class EditorActivity extends Activity implements LoaderManager.LoaderCall
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+       // getActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         mCurrentBookUri = intent.getData();
