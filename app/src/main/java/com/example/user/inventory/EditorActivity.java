@@ -13,11 +13,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -25,7 +27,7 @@ import com.example.user.inventory.data.InventoryContract;
 
 import java.net.URI;
 
-public class EditorActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor>{
+public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final int EXISTING_BOOK_LOADER = 0;
     private Uri mCurrentBookUri;
@@ -36,6 +38,7 @@ public class EditorActivity extends Activity implements LoaderManager.LoaderCall
     private EditText mSuppNumberEditText;
 
     private boolean mBookHasChanged = false;
+    int quantityLocal=0;
 
     private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
         @Override
@@ -50,7 +53,6 @@ public class EditorActivity extends Activity implements LoaderManager.LoaderCall
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
-       // getActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent intent = getIntent();
         mCurrentBookUri = intent.getData();
@@ -71,11 +73,45 @@ public class EditorActivity extends Activity implements LoaderManager.LoaderCall
         mSuppNameEditText = (EditText) findViewById(R.id.supplierNameEdit);
         mSuppNumberEditText = (EditText) findViewById(R.id.SupplierNumberEdit);
 
+        Button minusButton = (Button) findViewById(R.id.quantityDecrement);
+        Button plusButton = (Button) findViewById(R.id.quantityIncrement);
+        Button orderButton = (Button) findViewById(R.id.orderBtn);
+
         mNameEditText.setOnTouchListener(mTouchListener);
         mPriceEditText.setOnTouchListener(mTouchListener);
         mQuantityEditText.setOnTouchListener(mTouchListener);
         mSuppNameEditText.setOnTouchListener(mTouchListener);
         mSuppNumberEditText.setOnTouchListener(mTouchListener);
+
+
+
+        minusButton.setOnClickListener(new View.OnClickListener() { // when minus is pressed - the quantity get -1
+            @Override
+            public void onClick(View view) {
+                if (quantityLocal == 0) {
+                    Toast.makeText(EditorActivity.this, "Quantity is zero", Toast.LENGTH_SHORT).show();
+                } else {
+                    quantityLocal -= 1;
+                    mQuantityEditText.setText(String.valueOf(quantityLocal));
+                }
+            }
+        });
+        plusButton.setOnClickListener(new View.OnClickListener() { // when plus is pressed - the quantity get +1
+            @Override
+            public void onClick(View view) {
+                quantityLocal += 1;
+                mQuantityEditText.setText(String.valueOf(quantityLocal));
+            }
+        });
+        orderButton.setOnClickListener(new View.OnClickListener() { // when plus is pressed - the quantity get +1
+            @Override
+            public void onClick(View view) {
+                Intent dialerIntent = new Intent(Intent.ACTION_DIAL);
+                dialerIntent.setData(Uri.parse("tel:" + mSuppNumberEditText.getText()));
+                startActivity(dialerIntent);
+
+            }
+        });
     }
 
     private void saveBook(){

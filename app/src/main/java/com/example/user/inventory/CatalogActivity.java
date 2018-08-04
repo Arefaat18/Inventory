@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +26,7 @@ import android.widget.TextView;
 import com.example.user.inventory.data.InventoryContract;
 
 
-public class CatalogActivity extends Activity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class CatalogActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int INVENTORY_LOADER = 0;
     InventoryCursorAdapter mCursorAdapter;
@@ -75,7 +76,7 @@ public class CatalogActivity extends Activity implements LoaderManager.LoaderCal
         values.put(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME,"Bloomsburry");
         values.put(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER,"201034365948");
 
-        Uri newUri = getContentResolver().insert(InventoryContract.InventoryEntry.CONTENT_URI,values);
+        getContentResolver().insert(InventoryContract.InventoryEntry.CONTENT_URI,values);
 
     }
 

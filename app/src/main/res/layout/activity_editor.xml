@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
-    >
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:textSize="20sp"
-                tools:text="Name" />
+                android:text="Name" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:textSize="20sp"
-                tools:text="Price" />
+                android:text="Price" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -133,13 +133,6 @@
                 android:layout_alignParentBottom="true"
                 android:text="Delete" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/savebtn"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:text="Save"/>
             <Button
                 android:id="@+id/orderBtn"
                 android:layout_width="wrap_content"
