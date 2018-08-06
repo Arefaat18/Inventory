@@ -18,7 +18,16 @@ import com.example.user.inventory.data.InventoryContract;
 public class InventoryCursorAdapter extends CursorAdapter {
 
     int quantity;
+    TextView nameTV;
+    TextView priceTV;
     TextView quantityTV;
+    int nameColumnIndex;
+    int priceColumnIndex;
+    int quantityColumnIndex;
+    String currentName;
+    String currentPrice;
+    String currentQuantity;
+    Button buttonBuy;
 
     public InventoryCursorAdapter(Context context, Cursor cursor){
         super(context,cursor,0);
@@ -31,24 +40,24 @@ public class InventoryCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        TextView nameTV = (TextView) view.findViewById(R.id.name);
-        TextView priceTV = (TextView) view.findViewById(R.id.price);
+        nameTV = (TextView) view.findViewById(R.id.name);
+        priceTV = (TextView) view.findViewById(R.id.price);
         quantityTV = (TextView) view.findViewById(R.id.quantity);
 
-        int nameColumnIndex = cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME);
-        int priceColumnIndex = cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_PRICE);
-        int quantityColumnIndex = cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_QUANTITY);
+        nameColumnIndex = cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME);
+        priceColumnIndex = cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_PRICE);
+        quantityColumnIndex = cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_QUANTITY);
 
-        String currentName = cursor.getString(nameColumnIndex);
-        String  currentPrice = cursor.getString(priceColumnIndex);
-        String  currentQuantity = cursor.getString(quantityColumnIndex);
+        currentName = cursor.getString(nameColumnIndex);
+        currentPrice = cursor.getString(priceColumnIndex);
+        currentQuantity = cursor.getString(quantityColumnIndex);
 
 
         nameTV.setText(currentName);
         priceTV.setText(currentPrice);
         quantityTV.setText(currentQuantity);
 
-        Button buttonBuy = (Button) view.findViewById(R.id.buybtn);
+        buttonBuy = (Button) view.findViewById(R.id.buybtn);
 
         buttonBuy.setOnClickListener(new View.OnClickListener() { // when minus is pressed - the quantity get -1
             @Override
