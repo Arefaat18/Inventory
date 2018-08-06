@@ -167,22 +167,7 @@ public class InventoryProvider extends ContentProvider {
     }
     private int updateItem(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
-        String name = values.getAsString(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME);
-        if(name == null){
-            throw new IllegalArgumentException("Product requires a name");
-        }
-        float price = values.getAsFloat(InventoryContract.InventoryEntry.COLUMN_PRICE);
-        if(price == 0.0f){
-            throw new IllegalArgumentException("Product requires a price");
-        }
-        String supplierName = values.getAsString(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME);
-        if(supplierName == null){
-            throw new IllegalArgumentException("Product requires a Supplier Name");
-        }
-        String supplierNumber = values.getAsString(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER);
-        if(supplierNumber == null){
-            throw new IllegalArgumentException("Product requires a Supplier Number");
-        }
+
         if (values.size() == 0){
             return 0;
         }

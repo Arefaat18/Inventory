@@ -37,6 +37,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private EditText mSuppNameEditText;
     private EditText mSuppNumberEditText;
 
+    String nameString;
+    String priceString;
+    String quantityString;
+    String suppNameString;
+    String suppNumberString;
+
+
     private boolean mBookHasChanged = false;
     int quantityLocal=0;
 
@@ -92,6 +99,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 if (quantityLocal == 0) {
                     Toast.makeText(EditorActivity.this, "Quantity is zero", Toast.LENGTH_SHORT).show();
                 } else {
+                    quantityLocal = Integer.parseInt(mQuantityEditText.getText().toString());
                     quantityLocal -= 1;
                     mQuantityEditText.setText(String.valueOf(quantityLocal));
                 }
@@ -100,6 +108,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         plusButton.setOnClickListener(new View.OnClickListener() { // when plus is pressed - the quantity get +1
             @Override
             public void onClick(View view) {
+                quantityLocal = Integer.parseInt(mQuantityEditText.getText().toString());
                 quantityLocal += 1;
                 mQuantityEditText.setText(String.valueOf(quantityLocal));
             }
@@ -116,32 +125,36 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     }
 
     private void saveBook(){
-        String nameString = mNameEditText.getText().toString().trim();
-        String priceString = mPriceEditText.getText().toString().trim();
-        String QuantityString = mQuantityEditText.getText().toString().trim();
-        String SuppNameString = mSuppNameEditText.getText().toString().trim();
-        String suppNumberString = mSuppNumberEditText.getText().toString().trim();
+        nameString = mNameEditText.getText().toString().trim();
+        priceString = mPriceEditText.getText().toString().trim();
+        quantityString = mQuantityEditText.getText().toString().trim();
+        suppNameString = mSuppNameEditText.getText().toString().trim();
+        suppNumberString = mSuppNumberEditText.getText().toString().trim();
 
-        if(mCurrentBookUri == null && TextUtils.isEmpty(nameString) && TextUtils.isEmpty(priceString) && TextUtils.isEmpty(QuantityString) && TextUtils.isEmpty(SuppNameString) && TextUtils.isEmpty(suppNumberString)){
+        if(mCurrentBookUri == null && TextUtils.isEmpty(nameString) && TextUtils.isEmpty(priceString) && TextUtils.isEmpty(quantityString) && TextUtils.isEmpty(suppNameString) && TextUtils.isEmpty(suppNumberString)){
+            return;
+        }
+        if(!validateData()){
             return;
         }
 
         ContentValues values = new ContentValues();
         values.put(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME,nameString);
-        values.put(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME,SuppNameString);
+        values.put(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME,suppNameString);
         values.put(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER,suppNumberString);
 
         float price= 0;
         if(!TextUtils.isEmpty(priceString)){
             price = Float.parseFloat(priceString);
         }
-        values.put(InventoryContract.InventoryEntry.COLUMN_PRICE,priceString);
+        values.put(InventoryContract.InventoryEntry.COLUMN_PRICE,price);
+
 
         int quantity=0;
-        if(!TextUtils.isEmpty(QuantityString)){
-            quantity=Integer.parseInt(QuantityString);
+        if(!TextUtils.isEmpty(quantityString)){
+            quantity=Integer.parseInt(quantityString);
         }
-        values.put(InventoryContract.InventoryEntry.COLUMN_QUANTITY,QuantityString);
+        values.put(InventoryContract.InventoryEntry.COLUMN_QUANTITY,quantity);
             if (mCurrentBookUri == null) {
                 Uri newUri = getContentResolver().insert(InventoryContract.InventoryEntry.CONTENT_URI, values);
 
@@ -181,6 +194,25 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         return true;
     }
 
+
+    private boolean validateData() {
+        if (TextUtils.isEmpty(nameString)) {
+            Toast.makeText(this, "Please Enter a Name", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        if (TextUtils.isEmpty(suppNameString)){
+            Toast.makeText(this, "Please Enter a Supplier Name", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (TextUtils.isEmpty(suppNumberString)){
+            Toast.makeText(this, "Please Enter a Supplier Number", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        // no need to validate price and quantity - automatically become zero if null
+        return true;
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // User clicked on a menu option in the app bar overflow menu
@@ -190,6 +222,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 // Save pet to database
                 saveBook();
                 // Exit activity
+                if(validateData())
                 finish();
                 return true;
             // Respond to a click on the "Delete" menu option

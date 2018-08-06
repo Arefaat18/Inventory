@@ -32,6 +32,8 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     private static final int INVENTORY_LOADER = 0;
     InventoryCursorAdapter mCursorAdapter;
     int quantity;
+    TextView quantityTV;
+    Button buttonBuy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +68,26 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
             }
         });
 
-        Button buttonBuy = (Button) findViewById(R.id.buybtn);
+        buttonBuy = (Button) findViewById(R.id.buybtn);
+        quantityTV = (TextView) findViewById(R.id.quantity);
+
+    /*    buttonBuy.setOnClickListener(new View.OnClickListener() { // when minus is pressed - the quantity get -1
+            @Override
+            public void onClick(View view) {
+                quantity = Integer.parseInt(quantityTV.getText().toString());
+                if (quantity == 0) {
+                    Toast.makeText(CatalogActivity.this, "Quantity is zero", Toast.LENGTH_SHORT).show();
+                } else {
+                    quantity -= 1;
+                    quantityTV.setText(String.valueOf(quantity));
+                }
+            }
+        }); */
 
 
         getLoaderManager().initLoader(INVENTORY_LOADER,null,this);
+
+
     }
 
     private void insertData(){
@@ -130,6 +148,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mCursorAdapter.swapCursor(data);
+
     }
 
     @Override

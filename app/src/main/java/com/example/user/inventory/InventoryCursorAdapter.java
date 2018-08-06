@@ -1,6 +1,7 @@
 package com.example.user.inventory;
 
 import android.content.ContentUris;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.text.TextUtils;
@@ -10,10 +11,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CursorAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.user.inventory.data.InventoryContract;
 
 public class InventoryCursorAdapter extends CursorAdapter {
+
+    int quantity;
+    TextView quantityTV;
 
     public InventoryCursorAdapter(Context context, Cursor cursor){
         super(context,cursor,0);
@@ -28,7 +33,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         TextView nameTV = (TextView) view.findViewById(R.id.name);
         TextView priceTV = (TextView) view.findViewById(R.id.price);
-        TextView quantityTV = (TextView) view.findViewById(R.id.quantity);
+        quantityTV = (TextView) view.findViewById(R.id.quantity);
 
         int nameColumnIndex = cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME);
         int priceColumnIndex = cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_PRICE);
@@ -38,8 +43,25 @@ public class InventoryCursorAdapter extends CursorAdapter {
         String  currentPrice = cursor.getString(priceColumnIndex);
         String  currentQuantity = cursor.getString(quantityColumnIndex);
 
+
         nameTV.setText(currentName);
         priceTV.setText(currentPrice);
         quantityTV.setText(currentQuantity);
+
+        Button buttonBuy = (Button) view.findViewById(R.id.buybtn);
+
+        buttonBuy.setOnClickListener(new View.OnClickListener() { // when minus is pressed - the quantity get -1
+            @Override
+            public void onClick(View view) {
+                quantity = Integer.parseInt(quantityTV.getText().toString());
+                if (quantity == 0) {
+                   Toast.makeText(view.getContext(), "Quantity is zero", Toast.LENGTH_SHORT).show();
+                } else {
+                    quantity -= 1;
+                    quantityTV.setText(String.valueOf(quantity));
+
+                }
+            }
+        });
     }
 }
