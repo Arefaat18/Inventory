@@ -4,6 +4,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,17 +18,17 @@ import com.example.user.inventory.data.InventoryContract;
 
 public class InventoryCursorAdapter extends CursorAdapter {
 
-    int quantity;
-    TextView nameTV;
-    TextView priceTV;
-    TextView quantityTV;
-    int nameColumnIndex;
-    int priceColumnIndex;
-    int quantityColumnIndex;
-    String currentName;
-    String currentPrice;
-    String currentQuantity;
-    Button buttonBuy;
+    public int quantity;
+    public TextView nameTV;
+    public TextView priceTV;
+    public TextView quantityTV;
+    public int nameColumnIndex;
+    public int priceColumnIndex;
+    public int quantityColumnIndex;
+    public String currentName;
+    public String currentPrice;
+    public String currentQuantity;
+    public Button buttonBuy;
 
     public InventoryCursorAdapter(Context context, Cursor cursor){
         super(context,cursor,0);
@@ -39,7 +40,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(View view, final Context context, Cursor cursor) {
         nameTV = (TextView) view.findViewById(R.id.name);
         priceTV = (TextView) view.findViewById(R.id.price);
         quantityTV = (TextView) view.findViewById(R.id.quantity);
@@ -47,6 +48,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
         nameColumnIndex = cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME);
         priceColumnIndex = cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_PRICE);
         quantityColumnIndex = cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry.COLUMN_QUANTITY);
+        final Long bookId = cursor.getLong(cursor.getColumnIndexOrThrow(InventoryContract.InventoryEntry._ID));
 
         currentName = cursor.getString(nameColumnIndex);
         currentPrice = cursor.getString(priceColumnIndex);
@@ -64,13 +66,17 @@ public class InventoryCursorAdapter extends CursorAdapter {
             public void onClick(View view) {
                 quantity = Integer.parseInt(quantityTV.getText().toString());
                 if (quantity == 0) {
-                   Toast.makeText(view.getContext(), "Quantity is zero", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), "Quantity is zero", Toast.LENGTH_SHORT).show();
                 } else {
                     quantity -= 1;
-                    quantityTV.setText(String.valueOf(quantity));
-
+                    ContentValues values = new ContentValues();
+                    values.put(InventoryContract.InventoryEntry.COLUMN_QUANTITY, quantity);
+                    String selection = InventoryContract.InventoryEntry._ID + "=?";
+                    Uri currentBookUri = ContentUris.withAppendedId(InventoryContract.InventoryEntry.CONTENT_URI, bookId);
+                    String[] selectionArgs = new String[]{String.valueOf(bookId)};
+                    context.getContentResolver().update(currentBookUri, values, selection, selectionArgs);
                 }
             }
         });
+        }
     }
-}
