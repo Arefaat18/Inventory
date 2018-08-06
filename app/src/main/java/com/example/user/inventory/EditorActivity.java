@@ -85,6 +85,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
 
 
+
         minusButton.setOnClickListener(new View.OnClickListener() { // when minus is pressed - the quantity get -1
             @Override
             public void onClick(View view) {
@@ -141,27 +142,24 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             quantity=Integer.parseInt(QuantityString);
         }
         values.put(InventoryContract.InventoryEntry.COLUMN_QUANTITY,QuantityString);
+            if (mCurrentBookUri == null) {
+                Uri newUri = getContentResolver().insert(InventoryContract.InventoryEntry.CONTENT_URI, values);
 
-        if(mCurrentBookUri == null){
-            Uri newUri = getContentResolver().insert(InventoryContract.InventoryEntry.CONTENT_URI,values);
+                if (newUri == null) {
+                    Toast.makeText(this, "Error with saving Book", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Book Saved",
+                            Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                int rowsAffected = getContentResolver().update(mCurrentBookUri, values, null, null);
+                if (rowsAffected == 0) {
+                    Toast.makeText(this, "Error with updating Book", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Book updated", Toast.LENGTH_SHORT).show();
+                }
+            }
 
-            if(newUri == null){
-                Toast.makeText(this, "Error with saving Book", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                Toast.makeText(this, "Book Saved",
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
-        else{
-            int rowsAffected = getContentResolver().update(mCurrentBookUri,values,null,null);
-            if(rowsAffected == 0){
-                Toast.makeText(this, "Error with updating Book", Toast.LENGTH_SHORT).show();
-            }
-            else{
-                Toast.makeText(this, "Book updated", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 
     @Override
@@ -282,11 +280,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             String supplierName = cursor.getString(supplierColumnIndex);
             String supplierNumber = cursor.getString(supplierNumberColumnIndex);
 
+            String priceString = String.valueOf(price);
+            String quantityString = String.valueOf(quantity);
+            mPriceEditText.setText(priceString);
+
             mNameEditText.setText(name);
-            mPriceEditText.setText((int) price);
-            mQuantityEditText.setText(quantity);
+            mQuantityEditText.setText(quantityString);
             mSuppNameEditText.setText(supplierName);
             mSuppNumberEditText.setText(supplierNumber);
+
+            quantityLocal = Integer.parseInt(quantityString);
         }
     }
 
@@ -367,4 +370,5 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // Close the activity
         finish();
     }
+
 }

@@ -20,7 +20,7 @@ public class InventoryProvider extends ContentProvider {
 
     static {
         mUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY,InventoryContract.PATH_INVENTORY,INVENTORY);
-        mUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY,InventoryContract.PATH_INVENTORY + "#",INVENTORY_ID);
+        mUriMatcher.addURI(InventoryContract.CONTENT_AUTHORITY,InventoryContract.PATH_INVENTORY + "/#",INVENTORY_ID);
     }
 
     private InventoryDbHelper mDbHelper;
@@ -88,8 +88,8 @@ public class InventoryProvider extends ContentProvider {
         if(name == null){
             throw new IllegalArgumentException("Product requires a name");
         }
-        Integer price = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_PRICE);
-        if(price == null){
+        float price = values.getAsFloat(InventoryContract.InventoryEntry.COLUMN_PRICE);
+        if(price == 0.0f){
             throw new IllegalArgumentException("Product requires a price");
         }
         String supplierName = values.getAsString(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME);
@@ -166,12 +166,13 @@ public class InventoryProvider extends ContentProvider {
         }
     }
     private int updateItem(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+
         String name = values.getAsString(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME);
         if(name == null){
             throw new IllegalArgumentException("Product requires a name");
         }
-        Integer price = values.getAsInteger(InventoryContract.InventoryEntry.COLUMN_PRICE);
-        if(price == null){
+        float price = values.getAsFloat(InventoryContract.InventoryEntry.COLUMN_PRICE);
+        if(price == 0.0f){
             throw new IllegalArgumentException("Product requires a price");
         }
         String supplierName = values.getAsString(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME);

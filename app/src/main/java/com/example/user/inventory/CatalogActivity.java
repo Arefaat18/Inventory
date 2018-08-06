@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.example.user.inventory.data.InventoryContract;
@@ -30,6 +31,7 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
     private static final int INVENTORY_LOADER = 0;
     InventoryCursorAdapter mCursorAdapter;
+    int quantity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,9 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
 
             }
         });
+
+        Button buttonBuy = (Button) findViewById(R.id.buybtn);
+
 
         getLoaderManager().initLoader(INVENTORY_LOADER,null,this);
     }

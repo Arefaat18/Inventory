@@ -122,26 +122,16 @@
                 android:id="@+id/SupplierNumberEdit"/>
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/deletebtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:text="Delete" />
 
             <Button
                 android:id="@+id/orderBtn"
+                android:layout_marginTop="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 android:text="Order" />
 
-        </RelativeLayout>
     </LinearLayout>
 
 
