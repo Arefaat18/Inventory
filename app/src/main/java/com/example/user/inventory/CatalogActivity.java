@@ -93,11 +93,11 @@ public class CatalogActivity extends AppCompatActivity implements LoaderManager.
     private void insertData(){
 
         ContentValues values = new ContentValues();
-        values.put(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME,"Harry Potter and the Sorcerer's Stone");
-        values.put(InventoryContract.InventoryEntry.COLUMN_PRICE,20);
-        values.put(InventoryContract.InventoryEntry.COLUMN_QUANTITY,30);
-        values.put(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME,"Bloomsburry");
-        values.put(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER,"201034365948");
+        values.put(InventoryContract.InventoryEntry.COLUMN_PRODUCT_NAME,R.string.dummy_name);
+        values.put(InventoryContract.InventoryEntry.COLUMN_PRICE,R.string.dummy_price);
+        values.put(InventoryContract.InventoryEntry.COLUMN_QUANTITY,R.string.dummy_quantity);
+        values.put(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_NAME,R.string.dummy_supplier_name);
+        values.put(InventoryContract.InventoryEntry.COLUMN_SUPPLIER_PHONE_NUMBER,R.string.dummy_supplier_number);
 
         getContentResolver().insert(InventoryContract.InventoryEntry.CONTENT_URI,values);
 

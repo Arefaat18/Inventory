@@ -65,12 +65,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mCurrentBookUri = intent.getData();
 
         if(mCurrentBookUri == null){
-            setTitle("Add a Book");
+            setTitle(R.string.title_add_item);
             invalidateOptionsMenu();
         }
         else
         {
-            setTitle("Edit a Book");
+            setTitle(R.string.title_edit_book);
             getLoaderManager().initLoader(EXISTING_BOOK_LOADER, null, this);
         }
 
@@ -97,7 +97,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             @Override
             public void onClick(View view) {
                 if (quantityLocal == 0) {
-                    Toast.makeText(EditorActivity.this, "Quantity is zero", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(EditorActivity.this, R.string.zero_quantity, Toast.LENGTH_SHORT).show();
                 } else {
                     quantityLocal = Integer.parseInt(mQuantityEditText.getText().toString());
                     quantityLocal -= 1;
@@ -159,17 +159,17 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 Uri newUri = getContentResolver().insert(InventoryContract.InventoryEntry.CONTENT_URI, values);
 
                 if (newUri == null) {
-                    Toast.makeText(this, "Error with saving Book", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.error_save, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Book Saved",
+                    Toast.makeText(this, R.string.save_success,
                             Toast.LENGTH_SHORT).show();
                 }
             } else {
                 int rowsAffected = getContentResolver().update(mCurrentBookUri, values, null, null);
                 if (rowsAffected == 0) {
-                    Toast.makeText(this, "Error with updating Book", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.error_update, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Book updated", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.update_sucess, Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -197,16 +197,16 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     private boolean validateData() {
         if (TextUtils.isEmpty(nameString)) {
-            Toast.makeText(this, "Please Enter a Name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.missing_name, Toast.LENGTH_SHORT).show();
             return false;
         }
 
         if (TextUtils.isEmpty(suppNameString)){
-            Toast.makeText(this, "Please Enter a Supplier Name", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.missing_supplier_name, Toast.LENGTH_SHORT).show();
             return false;
         }
         if (TextUtils.isEmpty(suppNumberString)){
-            Toast.makeText(this, "Please Enter a Supplier Number", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.missing_supplier_number, Toast.LENGTH_SHORT).show();
             return false;
         }
         // no need to validate price and quantity - automatically become zero if null
@@ -339,9 +339,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the postivie and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Discard your changes and quit editing?");
-        builder.setPositiveButton("Discard", discardButtonClickListener);
-        builder.setNegativeButton("Keep Editing", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.discard_question);
+        builder.setPositiveButton(R.string.discard, discardButtonClickListener);
+        builder.setNegativeButton(R.string.keep_edit, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Keep editing" button, so dismiss the dialog
                 // and continue editing the pet.
@@ -359,14 +359,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         // Create an AlertDialog.Builder and set the message, and click listeners
         // for the postivie and negative buttons on the dialog.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Delete this Book?");
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+        builder.setMessage(R.string.delete_question);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Delete" button, so delete the pet.
                 deleteBook();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Cancel" button, so dismiss the dialog
                 // and continue editing the pet.
@@ -391,11 +391,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             // Show a toast message depending on whether or not the delete was successful.
             if (rowsDeleted == 0) {
                 // If no rows were deleted, then there was an error with the delete.
-                Toast.makeText(this,"Error with deleting pet",
+                Toast.makeText(this,R.string.error_delete,
                         Toast.LENGTH_SHORT).show();
             } else {
                 // Otherwise, the delete was successful and we can display a toast.
-                Toast.makeText(this, "Book Deleted",
+                Toast.makeText(this, R.string.success_delete,
                         Toast.LENGTH_SHORT).show();
             }
         }

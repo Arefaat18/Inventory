@@ -66,7 +66,7 @@ public class InventoryCursorAdapter extends CursorAdapter {
             public void onClick(View view) {
                 quantity = Integer.parseInt(quantityTV.getText().toString());
                 if (quantity == 0) {
-                    Toast.makeText(view.getContext(), "Quantity is zero", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(view.getContext(), R.string.zero_quantity, Toast.LENGTH_SHORT).show();
                 } else {
                     quantity -= 1;
                     ContentValues values = new ContentValues();

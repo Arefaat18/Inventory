@@ -2,4 +2,48 @@
     <string name="app_name">Inventory</string>
     <string name="title_activity_detailed_view">DetailedViewActivity</string>
     <string name="title_activity_editor">EditorActivity</string>
+
+    <string name="dummy_name">Harry Potter and the Sorcerer\'s Stone</string>
+    <string name="dummy_price">20.0</string>
+    <string name="dummy_quantity">30</string>
+    <string name="dummy_supplier_name">Bloomsburry</string>
+    <string name="dummy_supplier_number">201034365948</string>
+
+    <string name="title_add_item">Add a Book</string>
+    <string name="title_edit_book">Edit a Book</string>
+
+    <string name="zero_quantity">Quantity is Zero</string>
+
+    <string name="error_save">Error with saving Book</string>
+    <string name="save_success">Book Saved</string>
+    <string name="error_update">Error with updating Book</string>
+    <string name="update_sucess">Book updated</string>
+
+    <string name="missing_name">Please Enter a Name</string>
+    <string name="missing_supplier_name">Please Enter a Supplier Name</string>
+    <string name="missing_supplier_number">Please Enter a Supplier Number</string>
+
+    <string name="discard_question">Discard your changes and quit editing?</string>
+    <string name="discard">Discard</string>
+    <string name="keep_edit">Keep Editing</string>
+
+    <string name="delete_question">Delete This Book?</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="error_delete">Error With Deleting Book</string>
+    <string name="success_delete">Book Deleted Successfully</string>
+
+    <string name="empty_view_text">The Inventory is empty</string>
+    <string name="empty_view_subtitle">Start by adding a product</string>
+
+    <string name="name_label">Name: </string>
+    <string name="price_label">Price: </string>
+    <string name="quantity_label">Quantity: </string>
+    <string name="minus_label">-</string>
+    <string name="plus_label">+</string>
+    <string name="supplier_name_label">Supplier Name: </string>
+    <string name="supplier_number_label">Supplier Number: </string>
+    <string name="order_label">Order</string>
+    <string name="buy_label">Buy</string>
 </resources>
