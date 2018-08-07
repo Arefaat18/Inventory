@@ -89,6 +89,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mQuantityEditText.setOnTouchListener(mTouchListener);
         mSuppNameEditText.setOnTouchListener(mTouchListener);
         mSuppNumberEditText.setOnTouchListener(mTouchListener);
+        minusButton.setOnTouchListener(mTouchListener);
+        plusButton.setOnTouchListener(mTouchListener);
 
 
 
@@ -96,6 +98,12 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         minusButton.setOnClickListener(new View.OnClickListener() { // when minus is pressed - the quantity get -1
             @Override
             public void onClick(View view) {
+                if(mQuantityEditText.getText().toString().matches("")){
+                    quantityLocal=0;
+                }
+                else{
+                    quantityLocal=Integer.parseInt(mQuantityEditText.getText().toString());
+                }
                 if (quantityLocal == 0) {
                     Toast.makeText(EditorActivity.this, R.string.zero_quantity, Toast.LENGTH_SHORT).show();
                 } else {
@@ -108,7 +116,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         plusButton.setOnClickListener(new View.OnClickListener() { // when plus is pressed - the quantity get +1
             @Override
             public void onClick(View view) {
-                quantityLocal = Integer.parseInt(mQuantityEditText.getText().toString());
+                if(mQuantityEditText.getText().toString().matches("")){
+                    quantityLocal=0;
+                }
+                else {
+                    quantityLocal = Integer.parseInt(mQuantityEditText.getText().toString());}
                 quantityLocal += 1;
                 mQuantityEditText.setText(String.valueOf(quantityLocal));
             }
@@ -322,7 +334,6 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             mSuppNameEditText.setText(supplierName);
             mSuppNumberEditText.setText(supplierNumber);
 
-            quantityLocal = Integer.parseInt(quantityString);
         }
     }
 
